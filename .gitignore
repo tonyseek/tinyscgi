@@ -1,0 +1,12 @@
+# autotools generated files
+build
+Makefile.in
+aclocal.m4
+configure
+depcomp
+install-sh
+missing
+
+*.swp
+*.log
+*.cache
