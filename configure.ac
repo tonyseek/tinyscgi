@@ -10,6 +10,8 @@ AC_CONFIG_HEADERS([config.h])
 
 # Checks for programs.
 AC_PROG_CC
+AM_PROG_CC_C_O
+AM_PATH_CHECK
 
 # Checks for libraries.
 
