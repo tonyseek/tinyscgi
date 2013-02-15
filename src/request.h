@@ -19,4 +19,8 @@ struct request
     char *body;
 };
 
+extern struct header_list * create_header_list();
+extern void destory_header_list(struct header_list *list);
+extern int append_header_list(struct header_list *list, struct header *item);
+
 #endif
