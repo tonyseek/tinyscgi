@@ -3,6 +3,7 @@
 
 AC_PREREQ([2.69])
 AC_INIT([tinyscgi], [0.1], [tonyseek@gmail.com])
+LT_INIT
 AM_INIT_AUTOMAKE
 AC_CONFIG_SRCDIR([config.h.in])
 AC_CONFIG_HEADERS([config.h])
