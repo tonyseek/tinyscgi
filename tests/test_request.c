@@ -1,6 +1,6 @@
 #include <check.h>
-#include "../src/request.h"
 #include "tcases.h"
+#include "../src/request.h"
 
 START_TEST(test_header_list)
 {
@@ -51,6 +51,8 @@ START_TEST(test_header_list)
         /* last */
         fail_unless(l->next == NULL);
     }
+
+    destory_header_list(list);
 }
 END_TEST
 

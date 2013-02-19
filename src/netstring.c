@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "netstring.h"
 
-static int parse_netstring(FILE *stream, char **buffer)
+int parse_netstring(FILE *stream, char **buffer)
 {
     size_t len;
     char *buf;
@@ -26,4 +26,9 @@ static int parse_netstring(FILE *stream, char **buffer)
     *buffer = buf;
 
     return NETSTRING_OK;
+}
+
+void destory_netstring(char *buffer)
+{
+    free(buffer);
 }
