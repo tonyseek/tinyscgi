@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "errors.h"
 #include "netstring.h"
 
 int parse_netstring(FILE *stream, char **buffer, size_t *length)
