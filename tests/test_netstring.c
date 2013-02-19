@@ -11,16 +11,16 @@ START_TEST(test_parse_netstring)
         "SCGI" "\0" "1" "\0"
         "REQUEST_METHOD" "\0" "POST" "\0"
         "REQUEST_URI" "\0" "/deepthought" "\0";
-    const char *path_t1 = "./data/test_netstring_1.txt";
 {
     FILE *stream;
     char *buffer;
+    size_t length;
     int ret;
 
-    stream = fopen(path_t1, "r");
+    stream = fopen(TEST_NETSTRING_PATH_1, "r");
     fail_if(stream == NULL, strerror(errno));
 
-    ret = parse_netstring(stream, &buffer);
+    ret = parse_netstring(stream, &buffer, NULL);
     fail_unless(ret == NETSTRING_OK);
 
     fclose(stream);
