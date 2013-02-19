@@ -7,6 +7,8 @@ struct request
 {
     struct header_list *headers;
     char *body;
+    /* private */
+    char *_headers_buffer;
 };
 
 #endif
