@@ -3,12 +3,15 @@
 
 AC_PREREQ([2.69])
 AC_INIT([tinyscgi], [0.1], [tonyseek@gmail.com])
+LT_INIT
 AM_INIT_AUTOMAKE
 AC_CONFIG_SRCDIR([config.h.in])
 AC_CONFIG_HEADERS([config.h])
 
 # Checks for programs.
 AC_PROG_CC
+AM_PROG_CC_C_O
+PKG_CHECK_MODULES([CHECK], [check >= 0.9.4])
 
 # Checks for libraries.
 

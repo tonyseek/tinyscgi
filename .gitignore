@@ -8,11 +8,14 @@ install-sh
 missing
 config.guess
 config.h
+config.h.in
 config.status
 config.sub
 libtool
 ltmain.sh
 stamp-h1
+test-driver
+compile
 
 # autotools generated directories
 .deps
