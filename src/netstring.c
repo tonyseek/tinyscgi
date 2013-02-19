@@ -2,10 +2,10 @@
 #include <stdlib.h>
 #include "netstring.h"
 
-int parse_netstring(FILE *stream, char **buffer)
+int parse_netstring(FILE *stream, char **buffer, size_t *length)
 {
-    size_t len;
     char *buf;
+    size_t len;
 
     if (fscanf(stream, "%9lu", &len) < 1)
         return NETSTRING_ERROR_STREAM;
@@ -23,7 +23,11 @@ int parse_netstring(FILE *stream, char **buffer)
     if (getc(stream) != ',')
         return NETSTRING_ERROR_FORMAT;
 
-    *buffer = buf;
+    /* out parameter */
+    if (buffer)
+        *buffer = buf;
+    if (length)
+        *length = len;
 
     return NETSTRING_OK;
 }

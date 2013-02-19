@@ -8,7 +8,7 @@
 #define NETSTRING_ERROR_NOMEM     (-0x0002)
 #define NETSTRING_ERROR_STREAM    (-0x0003)
 
-extern int parse_netstring(FILE *, char **);
+extern int parse_netstring(FILE *, char **, size_t *);
 extern void destory_netstring(char *);
 
 #endif
