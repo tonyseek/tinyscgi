@@ -43,3 +43,40 @@ int append_header_list(struct header_list *list, struct header *item)
 
     return 0;
 }
+
+int parse_request_headers(const char *buffer, size_t length,
+                          struct header_list *headers)
+{
+    size_t i;
+    enum { name_ptr, name, value_ptr, value } s;
+    struct header_list *n;
+
+    for (i=0, s=name_ptr, n=headers; i<length; i++)
+    {
+        switch (s)
+        {
+            case name_ptr:
+                n->item.name = buffer[i] ? (char *) &buffer[i] : NULL;
+                s = name;
+                break;
+            case name:
+                if (buffer[i] == '\0')
+                    s = value_ptr;
+                break;
+            case value_ptr:
+                n->item.value = buffer[i] ? (char *) &buffer[i] : NULL;
+                s = value;
+                break;
+            case value:
+                if (buffer[i] == '\0' && (i + 1) < length)
+                {
+                    n->next = create_header_list();
+                    n = n->next;
+                    s = name_ptr;
+                }
+                break;
+        }
+    }
+
+    return 0;
+}

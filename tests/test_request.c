@@ -1,6 +1,11 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <errno.h>
 #include <check.h>
 #include "tcases.h"
 #include "../src/request.h"
+#include "../src/netstring.h"
 
 START_TEST(test_header_list)
 {
@@ -56,9 +61,69 @@ START_TEST(test_header_list)
 }
 END_TEST
 
+START_TEST(test_parse_request)
+{
+    FILE *stream;
+    char *headers_buffer;
+    size_t length;
+    int ret;
+    struct request request;
+
+    stream = fopen(TEST_NETSTRING_PATH_1, "r");
+    {
+        fail_if(stream == NULL, strerror(errno));
+        ret = parse_netstring(stream, &headers_buffer, &length);
+        {
+            fail_unless(ret == NETSTRING_OK);
+
+            request.headers = create_header_list();
+            {
+                /* parse headers */
+                parse_request_headers((const char *) headers_buffer, length,
+                                      request.headers);
+                /* allocate body spcae */
+                request.body = (char *) malloc(4096);
+                {
+                    struct header_list *list;
+
+                    fread(request.body, sizeof(char), 4096, stream);
+
+                    /* check the request headers */
+                    /* 0 */
+                    list = request.headers;
+                    ck_assert_str_eq(list->item.name, "CONTENT_LENGTH");
+                    ck_assert_str_eq(list->item.value, "27");
+                    /* 1 */
+                    list = list->next;
+                    ck_assert_str_eq(list->item.name, "SCGI");
+                    ck_assert_str_eq(list->item.value, "1");
+                    /* 2 */
+                    list = list->next;
+                    ck_assert_str_eq(list->item.name, "REQUEST_METHOD");
+                    ck_assert_str_eq(list->item.value, "POST");
+                    /* 4 */
+                    list = list->next;
+                    ck_assert_str_eq(list->item.name, "REQUEST_URI");
+                    ck_assert_str_eq(list->item.value, "/deepthought");
+
+                    /* check the request body */
+                    ck_assert_str_eq(request.body,
+                                     "What is the answer to life?\n");
+                }
+                free(request.body);
+            }
+            destory_header_list(request.headers);
+        }
+        destory_netstring(headers_buffer);
+    }
+    fclose(stream);
+}
+END_TEST
+
 TCase * tcase_request(void)
 {
     TCase *tcase = tcase_create("request");
     tcase_add_test(tcase, test_header_list);
+    tcase_add_test(tcase, test_parse_request);
     return tcase;
 }
