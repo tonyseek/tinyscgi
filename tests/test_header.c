@@ -45,16 +45,16 @@ START_TEST(test_header_list)
         fail_unless(l->item.value == NULL);
         /* 1 */
         l = l->next;
-        fail_unless(l->item.name == "CONTENT_LENGTH");
-        fail_unless(l->item.value == "0");
+        ck_assert_str_eq(l->item.name, "CONTENT_LENGTH");
+        ck_assert_str_eq(l->item.value, "0");
         /* 2 */
         l = l->next;
-        fail_unless(l->item.name == "SCGI");
-        fail_unless(l->item.value == "1");
+        ck_assert_str_eq(l->item.name, "SCGI");
+        ck_assert_str_eq(l->item.value, "1");
         /* 3 */
         l = l->next;
-        fail_unless(l->item.name == "REQUEST_METHOD");
-        fail_unless(l->item.value == "GET");
+        ck_assert_str_eq(l->item.name, "REQUEST_METHOD");
+        ck_assert_str_eq(l->item.value, "GET");
         /* last */
         fail_unless(l->next == NULL);
     }
@@ -85,27 +85,10 @@ START_TEST(test_parse_request_header)
                 /* allocate body spcae */
                 request.body = (char *) malloc(4096);
                 {
-                    struct header_list *list;
-
                     fread(request.body, sizeof(char), 4096, stream);
 
                     /* check the request headers */
-                    /* 0 */
-                    list = request.headers;
-                    ck_assert_str_eq(list->item.name, "CONTENT_LENGTH");
-                    ck_assert_str_eq(list->item.value, "27");
-                    /* 1 */
-                    list = list->next;
-                    ck_assert_str_eq(list->item.name, "SCGI");
-                    ck_assert_str_eq(list->item.value, "1");
-                    /* 2 */
-                    list = list->next;
-                    ck_assert_str_eq(list->item.name, "REQUEST_METHOD");
-                    ck_assert_str_eq(list->item.value, "POST");
-                    /* 4 */
-                    list = list->next;
-                    ck_assert_str_eq(list->item.name, "REQUEST_URI");
-                    ck_assert_str_eq(list->item.value, "/deepthought");
+                    check_headers_for_42((void *) request.headers);
 
                     /* check the request body */
                     ck_assert_str_eq(request.body,
@@ -127,4 +110,34 @@ TCase * tcase_header(void)
     tcase_add_test(tcase, test_header_list);
     tcase_add_test(tcase, test_parse_request_header);
     return tcase;
+}
+
+void check_headers_for_42(void *data)
+{
+    struct header_list *list;
+
+    list = (struct header_list *) data;
+
+    /* 0 */
+    ck_assert_str_eq(list->item.name, "CONTENT_LENGTH");
+    ck_assert_str_eq(list->item.value, "27");
+
+    /* 1 */
+    list = list->next;
+    ck_assert_str_eq(list->item.name, "SCGI");
+    ck_assert_str_eq(list->item.value, "1");
+
+    /* 2 */
+    list = list->next;
+    ck_assert_str_eq(list->item.name, "REQUEST_METHOD");
+    ck_assert_str_eq(list->item.value, "POST");
+
+    /* 3 */
+    list = list->next;
+    ck_assert_str_eq(list->item.name, "REQUEST_URI");
+    ck_assert_str_eq(list->item.value, "/deepthought");
+
+    /* last */
+    printf("[%X]", list->next);
+    fail_unless(list->next == NULL);
 }

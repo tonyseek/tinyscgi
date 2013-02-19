@@ -7,4 +7,6 @@ TCase * tcase_request(void);
 
 #define TEST_NETSTRING_PATH_1 "./data/test_netstring_1.txt"
 
+extern void check_headers_for_42(void *);
+
 #endif
