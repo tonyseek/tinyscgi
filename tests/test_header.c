@@ -4,8 +4,9 @@
 #include <errno.h>
 #include <check.h>
 #include "tcases.h"
-#include "../src/request.h"
 #include "../src/netstring.h"
+#include "../src/header.h"
+#include "../src/request.h"
 
 START_TEST(test_header_list)
 {
@@ -61,26 +62,25 @@ START_TEST(test_header_list)
 }
 END_TEST
 
-START_TEST(test_parse_request)
+START_TEST(test_parse_request_header)
 {
     FILE *stream;
-    char *headers_buffer;
-    size_t length;
+    char *buffer;
+    size_t len;
     int ret;
     struct request request;
 
     stream = fopen(TEST_NETSTRING_PATH_1, "r");
     {
         fail_if(stream == NULL, strerror(errno));
-        ret = parse_netstring(stream, &headers_buffer, &length);
+        ret = parse_netstring(stream, &buffer, &len);
         {
             fail_unless(ret == NETSTRING_OK);
 
             request.headers = create_header_list();
             {
                 /* parse headers */
-                parse_request_headers((const char *) headers_buffer, length,
-                                      request.headers);
+                parse_headers((const char *) buffer, len, request.headers);
                 /* allocate body spcae */
                 request.body = (char *) malloc(4096);
                 {
@@ -114,16 +114,16 @@ START_TEST(test_parse_request)
             }
             destory_header_list(request.headers);
         }
-        destory_netstring(headers_buffer);
+        destory_netstring(buffer);
     }
     fclose(stream);
 }
 END_TEST
 
-TCase * tcase_request(void)
+TCase * tcase_header(void)
 {
-    TCase *tcase = tcase_create("request");
+    TCase *tcase = tcase_create("header");
     tcase_add_test(tcase, test_header_list);
-    tcase_add_test(tcase, test_parse_request);
+    tcase_add_test(tcase, test_parse_request_header);
     return tcase;
 }

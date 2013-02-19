@@ -6,8 +6,8 @@
 Suite * tinyscgi_suite(void)
 {
     Suite *suite = suite_create("tinyscgi");
-    suite_add_tcase(suite, tcase_request());
     suite_add_tcase(suite, tcase_netstring());
+    suite_add_tcase(suite, tcase_header());
     return suite;
 }
 
