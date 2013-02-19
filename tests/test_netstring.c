@@ -3,6 +3,7 @@
 #include <errno.h>
 #include <check.h>
 #include "tcases.h"
+#include "../src/errors.h"
 #include "../src/netstring.h"
 
 START_TEST(test_parse_netstring)

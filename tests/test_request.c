@@ -1,64 +1,32 @@
+#include <stdio.h>
 #include <check.h>
 #include "tcases.h"
+#include "../src/errors.h"
+#include "../src/netstring.h"
+#include "../src/header.h"
 #include "../src/request.h"
 
-START_TEST(test_header_list)
+START_TEST(test_parse_request)
 {
-    struct header_list *list;
+    FILE *stream;
+    struct request r;
 
-    list = create_header_list();
-
-    /* checks initial values */
+    stream = fopen(TEST_NETSTRING_PATH_1, "r");
     {
-        fail_unless(list->item.name == NULL);
-        fail_unless(list->item.value == NULL);
-        fail_unless(list->next == NULL);
-    }
-
-    /* checks appending */
-    {
-        struct header headers[] =
+        parse_request(stream, &r, 4096);
         {
-            {"CONTENT_LENGTH", "0"},
-            {"SCGI", "1"},
-            {"REQUEST_METHOD", "GET"},
-        };
-        size_t i;
-        size_t len = sizeof(headers) / sizeof(struct header);
-
-        for (i=0; i<len; i++)
-            append_header_list(list, &headers[i]);
+            check_headers_for_42((void *) r.headers);
+            ck_assert_str_eq(r.body, "What is the answer to life?\n");
+        }
+        destory_request(&r);
     }
-    {
-        /* the header creating context has been unwound. */
-        struct header_list *l;
-        /* 0 */
-        l = list;
-        fail_unless(l->item.name == NULL);
-        fail_unless(l->item.value == NULL);
-        /* 1 */
-        l = l->next;
-        fail_unless(l->item.name == "CONTENT_LENGTH");
-        fail_unless(l->item.value == "0");
-        /* 2 */
-        l = l->next;
-        fail_unless(l->item.name == "SCGI");
-        fail_unless(l->item.value == "1");
-        /* 3 */
-        l = l->next;
-        fail_unless(l->item.name == "REQUEST_METHOD");
-        fail_unless(l->item.value == "GET");
-        /* last */
-        fail_unless(l->next == NULL);
-    }
-
-    destory_header_list(list);
+    fclose(stream);
 }
 END_TEST
 
 TCase * tcase_request(void)
 {
     TCase *tcase = tcase_create("request");
-    tcase_add_test(tcase, test_header_list);
+    tcase_add_test(tcase, test_parse_request);
     return tcase;
 }
