@@ -33,6 +33,8 @@ int parse_request(FILE *stream, struct request *request, size_t body_max_len)
 
     /* save private resource handle */
     request->_headers_buffer = headers_buffer;
+
+    return REQUEST_OK;
 }
 
 int destory_request(struct request *request)
