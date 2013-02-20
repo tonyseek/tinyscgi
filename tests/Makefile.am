@@ -1,6 +1,5 @@
 TESTS = check_tinyscgi
 check_PROGRAMS = check_tinyscgi
-include_HEADERS = tcases.h
 
 check_tinyscgi_SOURCES = check_tinyscgi.c
 check_tinyscgi_SOURCES += test_netstring.c test_header.c test_request.c

@@ -1,6 +1,8 @@
 bin_PROGRAMS = tinyscgi
 lib_LTLIBRARIES = libtinyscgi.la
-include_HEADERS = netstring.h header.h request.h
+include_tinyscgi_HEADERS = netstring.h header.h request.h
+
+include_tinyscgidir = $(includedir)/tinyscgi
 
 tinyscgi_SOURCES = tinyscgi.c
 tinyscgi_LDADD = libtinyscgi.la
