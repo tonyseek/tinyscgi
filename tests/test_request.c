@@ -16,7 +16,7 @@ START_TEST(test_parse_request)
         parse_request(stream, &r, 4096);
         {
             check_headers_for_42((void *) r.headers);
-            ck_assert_str_eq(r.body, "What is the answer to life?\n");
+            ck_assert_str_eq(r.body, "What is the answer to life?");
         }
         destory_request(&r);
     }
