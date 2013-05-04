@@ -62,4 +62,6 @@ int destory_request(struct request *request)
         free(request->body);
     if (request->_headers_buffer && request->_headers_buffer[0])
         free(request->_headers_buffer);
+
+    return REQUEST_OK;
 }
