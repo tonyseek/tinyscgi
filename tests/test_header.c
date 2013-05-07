@@ -67,7 +67,7 @@ START_TEST(test_parse_request_header)
 {
     FILE *stream;
     char *buffer;
-    size_t len;
+    size_t len, body_len;
     int ret;
     struct request request;
 
@@ -85,7 +85,8 @@ START_TEST(test_parse_request_header)
                 /* allocate body spcae */
                 request.body = (char *) malloc(4096);
                 {
-                    fread(request.body, sizeof(char), 4096, stream);
+                    body_len = fread(request.body, sizeof(char), 4096, stream);
+                    request.body[body_len] = '\0';
 
                     /* check the request headers */
                     check_headers_for_42((void *) request.headers);
