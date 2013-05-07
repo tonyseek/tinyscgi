@@ -138,6 +138,5 @@ void check_headers_for_42(void *data)
     ck_assert_str_eq(list->item.value, "/deepthought");
 
     /* last */
-    printf("[%X]", list->next);
     fail_unless(list->next == NULL);
 }
