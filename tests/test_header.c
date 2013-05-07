@@ -4,10 +4,10 @@
 #include <errno.h>
 #include <check.h>
 #include "tcases.h"
-#include "../src/scgi/errors.h"
-#include "../src/scgi/netstring.h"
-#include "../src/scgi/header.h"
-#include "../src/scgi/request.h"
+#include "../src/tscgi/errors.h"
+#include "../src/tscgi/netstring.h"
+#include "../src/tscgi/header.h"
+#include "../src/tscgi/request.h"
 
 START_TEST(test_header_list)
 {
