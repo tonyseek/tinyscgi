@@ -3,8 +3,8 @@
 #include <errno.h>
 #include <check.h>
 #include "tcases.h"
-#include "../src/scgi/errors.h"
-#include "../src/scgi/netstring.h"
+#include "../src/tscgi/errors.h"
+#include "../src/tscgi/netstring.h"
 
 START_TEST(test_parse_netstring)
     const char *expect_buffer_value =

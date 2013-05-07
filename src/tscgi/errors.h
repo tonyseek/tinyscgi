@@ -9,5 +9,6 @@
 #define REQUEST_OK                        (0)
 #define REQUEST_ERROR_CONTENT_LENGTH      (0x0010)
 #define REQUEST_ERROR_BODY_TOO_MAX        (0x0020)
+#define REQUEST_ERROR_BROKEN_PIPE         (0x0030)
 
 #endif

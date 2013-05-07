@@ -4,10 +4,10 @@
 #include <errno.h>
 #include <check.h>
 #include "tcases.h"
-#include "../src/scgi/errors.h"
-#include "../src/scgi/netstring.h"
-#include "../src/scgi/header.h"
-#include "../src/scgi/request.h"
+#include "../src/tscgi/errors.h"
+#include "../src/tscgi/netstring.h"
+#include "../src/tscgi/header.h"
+#include "../src/tscgi/request.h"
 
 START_TEST(test_header_list)
 {
@@ -67,7 +67,7 @@ START_TEST(test_parse_request_header)
 {
     FILE *stream;
     char *buffer;
-    size_t len;
+    size_t len, body_len;
     int ret;
     struct request request;
 
@@ -85,7 +85,8 @@ START_TEST(test_parse_request_header)
                 /* allocate body spcae */
                 request.body = (char *) malloc(4096);
                 {
-                    fread(request.body, sizeof(char), 4096, stream);
+                    body_len = fread(request.body, sizeof(char), 4096, stream);
+                    request.body[body_len] = '\0';
 
                     /* check the request headers */
                     check_headers_for_42((void *) request.headers);
@@ -138,6 +139,5 @@ void check_headers_for_42(void *data)
     ck_assert_str_eq(list->item.value, "/deepthought");
 
     /* last */
-    printf("[%X]", list->next);
     fail_unless(list->next == NULL);
 }

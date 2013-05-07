@@ -10,7 +10,7 @@ int parse_request(FILE *stream, struct request *request, size_t body_max_len)
 {
     int ret;
     char *headers_buffer, *body_buffer;
-    size_t headers_len, body_len;
+    size_t headers_len, body_len, read_len;
     struct header_list *headers;
 
     /* parse netstring */
@@ -37,7 +37,13 @@ int parse_request(FILE *stream, struct request *request, size_t body_max_len)
     {
         body_buffer = (char *) malloc(body_len);
         memset(body_buffer, 0, body_len);
-        fread(body_buffer, sizeof(char), body_len, stream);
+        read_len = fread(body_buffer, sizeof(char), body_len, stream);
+        if (!read_len)
+            return REQUEST_ERROR_BROKEN_PIPE;
+        else
+            /* be safe: strange content may be read out buffer size in some
+             * operation system, such as Mac OSX. */
+            body_buffer[read_len] = '\0';
     }
     else
     {
@@ -62,4 +68,6 @@ int destory_request(struct request *request)
         free(request->body);
     if (request->_headers_buffer && request->_headers_buffer[0])
         free(request->_headers_buffer);
+
+    return REQUEST_OK;
 }

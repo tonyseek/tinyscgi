@@ -1,30 +1,9 @@
-# autotools generated files
-Makefile.in
-Makefile
-aclocal.m4
-configure
-depcomp
-install-sh
-missing
-config.guess
-config.h
-config.h.in
-config.status
-config.sub
-libtool
-ltmain.sh
-stamp-h1
-test-driver
-compile
-
-# autotools generated directories
-.deps
-.libs
+# target directories
 build
 
 # temporary files
 *~
-*.swp
+*.sw[po]
 *.log
 *.cache
 
