@@ -2,7 +2,7 @@ CMAKE = cmake
 TARGET_DIR = build
 SOURCE_DIR = $(CURDIR)
 
-all: build test
+all: build
 
 prepare:
 	mkdir -p $(TARGET_DIR)
