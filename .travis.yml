@@ -1,0 +1,11 @@
+language: c
+compiler:
+  - gcc
+  - clang
+before_script:
+  - sudo apt-get install check
+  - make clean
+script: make build && make test
+branches:
+  only:
+    - master
