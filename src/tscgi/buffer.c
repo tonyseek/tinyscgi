@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <string.h>
 #include "buffer.h"
 
 void buffer_init(struct buffer *buffer, void *ptr, size_t len)
@@ -11,6 +12,19 @@ void buffer_init(struct buffer *buffer, void *ptr, size_t len)
 inline size_t buffer_pos(struct buffer *buffer)
 {
     return buffer->pos;
+}
+
+inline size_t buffer_len(struct buffer *buffer)
+{
+    return buffer->len;
+}
+
+inline char buffer_getc(struct buffer *buffer)
+{
+    char *buf = (char *) buffer_current(buffer);
+    if (strlen(buf) > 1 && buffer_forward(buffer, 1) > 0)
+        return buf[0];
+    return '\0';
 }
 
 inline size_t buffer_forward(struct buffer *buffer, size_t offset)
