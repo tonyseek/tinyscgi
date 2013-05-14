@@ -60,9 +60,22 @@ START_TEST(test_buffer)
 }
 END_TEST
 
+START_TEST(test_eof_getc_bug)
+{
+    /* A bug has been fixed: use buffer_getc before eof will get empty */
+    struct buffer buf;
+
+    buffer_init(&buf, "abc#", 4);
+    buffer_forward(&buf, 3);
+
+    ck_assert(buffer_getc(&buf) == '#');
+}
+END_TEST
+
 TCase * tcase_buffer(void)
 {
     TCase *tcase = tcase_create("buffer");
     tcase_add_test(tcase, test_buffer);
+    tcase_add_test(tcase, test_eof_getc_bug);
     return tcase;
 }
