@@ -5,6 +5,7 @@
 #include "tcases.h"
 #include "../src/tscgi/errors.h"
 #include "../src/tscgi/netstring.h"
+#include "../src/tscgi/buffer.h"
 
 START_TEST(test_parse_netstring)
     const char *expect_buffer_value =
@@ -13,18 +14,24 @@ START_TEST(test_parse_netstring)
         "REQUEST_METHOD" "\0" "POST" "\0"
         "REQUEST_URI" "\0" "/deepthought" "\0";
 {
-    FILE *stream;
+    struct buffer stream;
+    FILE *file;
+    char file_buffer[256];
     char *buffer;
     size_t length;
     int ret;
 
-    stream = fopen(TEST_NETSTRING_PATH_1, "r");
-    fail_if(stream == NULL, strerror(errno));
+    file = fopen(TEST_NETSTRING_PATH_1, "r");
+    fail_if(file == NULL, strerror(errno));
 
-    ret = parse_netstring(stream, &buffer, NULL);
+    length = fread(file_buffer, 1, 256, file);
+    fail_if(length < 0, strerror(errno));
+    buffer_init(&stream, file_buffer, length);
+
+    ret = parse_netstring(&stream, &buffer, NULL);
     fail_unless(ret == NETSTRING_OK);
 
-    fclose(stream);
+    fclose(file);
 
     ck_assert_str_eq(buffer, expect_buffer_value);
 
