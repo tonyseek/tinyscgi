@@ -1,8 +1,11 @@
 add_subdirectory (tscgi)
+add_subdirectory (tscgi-server)
+
+find_package (Libuv REQUIRED)
 
 # add excutable target
 add_executable (tinyscgi tinyscgi.c)
-target_link_libraries (tinyscgi tscgi)
+target_link_libraries (tinyscgi ${LIBUV_LIBRARIES} tscgi)
 
 # install executable target
 install (TARGETS tinyscgi
