@@ -4,6 +4,7 @@
 TCase * tcase_netstring(void);
 TCase * tcase_header(void);
 TCase * tcase_request(void);
+TCase * tcase_buffer(void);
 
 #define TEST_NETSTRING_PATH_1 "./data/test_netstring_1.txt"
 
