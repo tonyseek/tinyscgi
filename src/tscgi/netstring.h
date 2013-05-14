@@ -3,7 +3,9 @@
 
 #include <stdio.h>
 
-extern int parse_netstring(FILE *, char **, size_t *);
+struct buffer;
+
+extern int parse_netstring(struct buffer *, char **, size_t *);
 extern void destory_netstring(char *);
 
 #endif

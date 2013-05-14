@@ -8,6 +8,7 @@
 #include "../src/tscgi/netstring.h"
 #include "../src/tscgi/header.h"
 #include "../src/tscgi/request.h"
+#include "../src/tscgi/buffer.h"
 
 START_TEST(test_header_list)
 {
@@ -65,16 +66,21 @@ END_TEST
 
 START_TEST(test_parse_request_header)
 {
-    FILE *stream;
+    FILE *file;
+    char file_buffer[256];
     char *buffer;
     size_t len, body_len;
     int ret;
     struct request request;
+    struct buffer stream;
 
-    stream = fopen(TEST_NETSTRING_PATH_1, "r");
+    file = fopen(TEST_NETSTRING_PATH_1, "r");
     {
-        fail_if(stream == NULL, strerror(errno));
-        ret = parse_netstring(stream, &buffer, &len);
+        fail_if(file == NULL, strerror(errno));
+        len = fread(file_buffer, 1, 256, file);
+        buffer_init(&stream, file_buffer, len);
+
+        ret = parse_netstring(&stream, &buffer, &len);
         {
             fail_unless(ret == NETSTRING_OK);
 
@@ -82,26 +88,12 @@ START_TEST(test_parse_request_header)
             {
                 /* parse headers */
                 parse_headers((const char *) buffer, len, request.headers);
-                /* allocate body spcae */
-                request.body = (char *) malloc(4096);
-                {
-                    body_len = fread(request.body, sizeof(char), 4096, stream);
-                    request.body[body_len] = '\0';
-
-                    /* check the request headers */
-                    check_headers_for_42((void *) request.headers);
-
-                    /* check the request body */
-                    ck_assert_str_eq(request.body,
-                                     "What is the answer to life?\n");
-                }
-                free(request.body);
             }
             destory_header_list(request.headers);
         }
         destory_netstring(buffer);
     }
-    fclose(stream);
+    fclose(file);
 }
 END_TEST
 

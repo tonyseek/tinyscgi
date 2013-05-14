@@ -12,7 +12,9 @@ struct request
     char *_headers_buffer;
 };
 
-extern int parse_request(FILE *, struct request *, size_t);
+struct buffer;
+
+extern int parse_request(struct buffer *, struct request *, size_t);
 extern int destory_request(struct request *);
 
 #endif
