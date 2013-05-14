@@ -9,3 +9,4 @@ script: make build && make test
 branches:
   only:
     - master
+    - develop
