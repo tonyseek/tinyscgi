@@ -3,9 +3,12 @@ compiler:
   - gcc
   - clang
 before_script:
-  - sudo apt-get install check
+  - sudo apt-get update -qq -y
+  - sudo apt-get install check -y
+  - sudo ./misc/install-libuv.sh
   - make clean
-script: make build && make test
+  - make
+script: make test
 branches:
   only:
     - master
