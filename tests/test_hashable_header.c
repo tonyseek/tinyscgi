@@ -5,7 +5,7 @@
 #include <check.h>
 #include "tcases.h"
 #include "tscgi/header.h"
-#include "tscgisrv-lua/header.h"
+#include "tscgilua/header.h"
 
 START_TEST(test_hashable_header_list)
 {

@@ -2,7 +2,7 @@ solution "tinyscgi"
     language "C"
     location "build"
     targetdir "target"
-    includedirs { "include" }
+    includedirs { "include", "deps/uthash/src" }
     configurations { "debug", "release" }
 
     configuration "debug"
@@ -32,6 +32,16 @@ project "tscgisrv"
     }
     links { "tscgi", "uv" }
 
+-- tinyscgi lua support library
+project "tscgilua"
+    kind "StaticLib"
+    targetname "tscgilua"
+    files {
+        "include/tscgilua/*.h",
+        "src/tscgilua/*.c",
+    }
+    links { "tscgi", "lua" }
+
 -- tinyscgi command line interface
 project "tinyscgi"
     kind "ConsoleApp"
@@ -41,6 +51,15 @@ project "tinyscgi"
     }
     links { "tscgi", "tscgisrv", "uv" }
 
+-- tinyscgi lua application server
+project "tinyscgi-lua"
+    kind "ConsoleApp"
+    targetname "tinyscgi-lua"
+    files {
+        "src/tinyscgi-lua.c",
+    }
+    links { "tscgi", "tscgisrv", "tscgilua", "uv", "lua" }
+
 -- tinyscgi tests
 project "tests"
     kind "ConsoleApp"
@@ -48,4 +67,4 @@ project "tests"
     files {
         "tests/*.c"
     }
-    links { "check", "tscgi" }
+    links { "check", "tscgi", "tscgilua" }
