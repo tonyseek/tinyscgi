@@ -10,6 +10,7 @@ Suite * tinyscgi_suite(void)
     suite_add_tcase(suite, tcase_header());
     suite_add_tcase(suite, tcase_request());
     suite_add_tcase(suite, tcase_buffer());
+    suite_add_tcase(suite, tcase_hashable_header());
     return suite;
 }
 

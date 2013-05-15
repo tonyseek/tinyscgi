@@ -1,0 +1,3 @@
+[submodule "deps/uthash"]
+	path = deps/uthash
+	url = git://github.com/troydhanson/uthash.git
