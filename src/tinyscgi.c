@@ -32,6 +32,7 @@ void init_hello_scgi_server(struct scgi_server *s)
     s->loop = uv_default_loop();
     s->max_conn = 128;
     s->process_request = &process_hello_request;
+    s->process_bad_request = NULL;
 
     s->bind_addrs[0] = uv_ip4_addr("0.0.0.0", 8000);
     s->nbind_addrs = 1;

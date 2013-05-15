@@ -11,6 +11,7 @@ static void on_connect_error(uv_loop_t *loop, int uv_errno);
 static void on_request(uv_stream_t *client, ssize_t nread, uv_buf_t buf);
 static void on_response_end(uv_write_t *response, int status);
 static uv_buf_t alloc_buffer(uv_handle_t *handle, size_t suggested_size);
+static void bad_request_default_processor(struct scgi_server *, int);
 
 
 /**
@@ -64,17 +65,19 @@ static void on_request(uv_stream_t *client, ssize_t nread, uv_buf_t buf)
     else if (nread > 0)
     {
         {
-            int rv;
+            int errcode;
             struct scgi_server *s;
 
             s = (struct scgi_server *) client->data;  /* unpack scgi_server */
 
             buffer_init(&request_buffer, buf.base, nread);
-            rv = parse_request(&request_buffer, &request, 4096);
-            if (rv != REQUEST_OK)
+            errcode = parse_request(&request_buffer, &request, 4096);
+            if (errcode != REQUEST_OK)
             {
-                /*tscgi_perror(rv); FIXME: error handle */
-                /*goto request_finished;*/
+                if (!s->process_bad_request)
+                    s->process_bad_request = &bad_request_default_processor;
+                s->process_bad_request(s, errcode);
+                goto request_end;
             }
 
             /* process request by predefined hook function */
@@ -97,6 +100,8 @@ static void on_request(uv_stream_t *client, ssize_t nread, uv_buf_t buf)
 
             uv_write(response, client, uv_response_buffer, 1, on_response_end);
         }
+
+request_end:
 
         /* release memory allocated by `alloc_buffer` */
         uv_read_stop(client);
@@ -131,4 +136,23 @@ void listen_scgi_server(struct scgi_server s)
         on_connect_error(s.loop, uv_errno);
     else
         uv_run(s.loop, UV_RUN_DEFAULT);
+}
+
+static void bad_request_default_processor(struct scgi_server *s, int errcode)
+{
+    char prefix[30] = {0};
+
+    sprintf(prefix, "bad request %d:", errcode);
+
+    fprintf(stderr, "\n");
+    if (errcode & NETSTRING_ERROR_STREAM)
+        fprintf(stderr, "%s netstring meets error stream.\n", prefix);
+    if (errcode & NETSTRING_ERROR_FORMAT)
+        fprintf(stderr, "%s netstring has error format.\n", prefix);
+    if (errcode & REQUEST_ERROR_CONTENT_LENGTH)
+        fprintf(stderr, "%s request content length not found.\n", prefix);
+    if (errcode & REQUEST_ERROR_BROKEN_PIPE)
+        fprintf(stderr, "%s request broken pipe.\n", prefix);
+    if (errcode & REQUEST_ERROR_BODY_TOO_MAX)
+        fprintf(stderr, "%s request body too max.\n", prefix);
 }

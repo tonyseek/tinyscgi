@@ -21,6 +21,7 @@ struct scgi_server
 
     void (*process_request)(struct scgi_server *, struct request *,
                             struct buffer *);
+    void (*process_bad_request)(struct scgi_server *, int);
 };
 
 extern void listen_scgi_server(struct scgi_server);
