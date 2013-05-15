@@ -22,14 +22,14 @@ START_TEST(test_parse_netstring)
     int ret;
 
     file = fopen(TEST_NETSTRING_PATH_1, "r");
-    fail_if(file == NULL, strerror(errno));
+    ck_assert_msg(file != NULL, strerror(errno));
 
     length = fread(file_buffer, 1, 256, file);
-    fail_if(length < 0, strerror(errno));
+    ck_assert_msg(length >= 0, strerror(errno));
     buffer_init(&stream, file_buffer, length);
 
     ret = parse_netstring(&stream, &buffer, NULL);
-    fail_unless(ret == NETSTRING_OK);
+    ck_assert(ret == NETSTRING_OK);
 
     fclose(file);
 

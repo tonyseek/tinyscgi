@@ -22,9 +22,8 @@ inline size_t buffer_len(struct buffer *buffer)
 inline char buffer_getc(struct buffer *buffer)
 {
     char *buf = (char *) buffer_current(buffer);
-    if (strlen(buf) > 1 && buffer_forward(buffer, 1) > 0)
-        return buf[0];
-    return '\0';
+    buffer_forward(buffer, 1);
+    return buf[0];
 }
 
 inline size_t buffer_forward(struct buffer *buffer, size_t offset)

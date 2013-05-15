@@ -18,9 +18,9 @@ START_TEST(test_header_list)
 
     /* checks initial values */
     {
-        fail_unless(list->item.name == NULL);
-        fail_unless(list->item.value == NULL);
-        fail_unless(list->next == NULL);
+        ck_assert(list->item.name == NULL);
+        ck_assert(list->item.value == NULL);
+        ck_assert(list->next == NULL);
     }
 
     /* checks appending */
@@ -42,8 +42,8 @@ START_TEST(test_header_list)
         struct header_list *l;
         /* 0 */
         l = list;
-        fail_unless(l->item.name == NULL);
-        fail_unless(l->item.value == NULL);
+        ck_assert(l->item.name == NULL);
+        ck_assert(l->item.value == NULL);
         /* 1 */
         l = l->next;
         ck_assert_str_eq(l->item.name, "CONTENT_LENGTH");
@@ -57,7 +57,7 @@ START_TEST(test_header_list)
         ck_assert_str_eq(l->item.name, "REQUEST_METHOD");
         ck_assert_str_eq(l->item.value, "GET");
         /* last */
-        fail_unless(l->next == NULL);
+        ck_assert(l->next == NULL);
     }
 
     destory_header_list(list);
@@ -76,13 +76,13 @@ START_TEST(test_parse_request_header)
 
     file = fopen(TEST_NETSTRING_PATH_1, "r");
     {
-        fail_if(file == NULL, strerror(errno));
+        ck_assert_msg(file != NULL, strerror(errno));
         len = fread(file_buffer, 1, 256, file);
         buffer_init(&stream, file_buffer, len);
 
         ret = parse_netstring(&stream, &buffer, &len);
         {
-            fail_unless(ret == NETSTRING_OK);
+            ck_assert(ret == NETSTRING_OK);
 
             request.headers = create_header_list();
             {
@@ -131,5 +131,5 @@ void check_headers_for_42(void *data)
     ck_assert_str_eq(list->item.value, "/deepthought");
 
     /* last */
-    fail_unless(list->next == NULL);
+    ck_assert(list->next == NULL);
 }
