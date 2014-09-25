@@ -1,24 +1,24 @@
-CMAKE = cmake
-TARGET_DIR = build
-SOURCE_DIR = $(CURDIR)
+PREMAKE = premake4
+BUILD_DIR = build
+TARGET_DIR = target
 
-ifeq ($(DEBUG), 1)
-	CMAKE_VARS := -DCMAKE_BUILD_TYPE=Debug
-endif
-
-all: build
-
-prepare:
-	mkdir -p $(TARGET_DIR)
-	cd $(TARGET_DIR); $(CMAKE) $(CMAKE_VARS) $(CURDIR)
-
-build: prepare
-	cd $(TARGET_DIR); $(MAKE)
+help:
+	@echo 'commands: test build clean'
+.PHONY: help
 
 test: build
-	cd $(TARGET_DIR); CTEST_OUTPUT_ON_FAILURE=1 $(MAKE) test
+	@echo
+	@echo "--------------------------------------------------"
+	@cd tests && ../target/tests
+	@echo "--------------------------------------------------"
+.PHONY: test
+
+build:
+	@$(PREMAKE) gmake
+	@$(MAKE) -C $(BUILD_DIR)
+.PHONY: build
 
 clean:
-	rm -rf $(TARGET_DIR)
-
-.PHONY: all prepare build test clean
+	rm -rf '$(BUILD_DIR)'
+	rm -rf '$(TARGET_DIR)'
+.PHONY: clean

@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <uv.h>
-#include "server.h"
-#include "../tscgi/errors.h"
-#include "../tscgi/buffer.h"
-#include "../tscgi/request.h"
+#include "tscgi/errors.h"
+#include "tscgi/buffer.h"
+#include "tscgi/request.h"
+#include "tscgisrv/server.h"
 
 static uv_buf_t alloc_buffer(uv_handle_t *handle, size_t suggested_size);
 static void on_connect(uv_stream_t *server, int status);

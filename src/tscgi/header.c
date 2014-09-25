@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "request.h"
+#include "tscgi/request.h"
 
 struct header_list * create_header_list()
 {

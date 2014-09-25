@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "errors.h"
-#include "netstring.h"
-#include "buffer.h"
+#include "tscgi/errors.h"
+#include "tscgi/netstring.h"
+#include "tscgi/buffer.h"
 
 int parse_netstring(struct buffer *stream, char **buffer, size_t *length)
 {
