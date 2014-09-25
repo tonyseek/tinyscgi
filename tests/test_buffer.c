@@ -1,7 +1,7 @@
 #include <check.h>
 #include <stdlib.h>
 #include "tcases.h"
-#include "../src/tscgi/buffer.h"
+#include "tscgi/buffer.h"
 
 START_TEST(test_buffer)
 {

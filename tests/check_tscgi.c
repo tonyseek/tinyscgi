@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <check.h>
-#include "../src/tscgi/request.h"
+#include "tscgi/request.h"
 #include "tcases.h"
 
 Suite * tinyscgi_suite(void)

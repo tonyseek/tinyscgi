@@ -13,10 +13,6 @@ solution "tinyscgi"
         defines "NDEBUG"
         flags { "Optimize" }
 
-    libdirs {
-        os.findlib("uv"),
-    }
-
 -- tinyscgi core library
 project "tscgi"
     kind "SharedLib"
@@ -44,3 +40,12 @@ project "tinyscgi"
         "src/tinyscgi.c",
     }
     links { "tscgi", "tscgisrv", "uv" }
+
+-- tinyscgi tests
+project "tests"
+    kind "ConsoleApp"
+    targetname "tests"
+    files {
+        "tests/*.c"
+    }
+    links { "check", "tscgi" }
