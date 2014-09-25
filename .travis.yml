@@ -8,7 +8,7 @@ before_script:
   - sudo apt-get update -qq
   - sudo apt-get install premake4 libuv-dev check -y
   - make clean
-script: make test
+script: make config=release test
 branches:
   only:
     - master
