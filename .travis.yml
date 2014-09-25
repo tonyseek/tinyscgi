@@ -3,11 +3,11 @@ compiler:
   - gcc
   - clang
 before_script:
-  - sudo apt-get update -qq -y
-  - sudo apt-get install check -y
-  - sudo ./misc/install-libuv.sh
+  - sudo add-apt-repository ppa:linuxjedi/ppa -y  # libuv-dev
+  - sudo add-apt-repository ppa:bitshifternz/ppa -y  # premake4
+  - sudo apt-get update -qq
+  - sudo apt-get install premake4 libuv-dev check -y
   - make clean
-  - make
 script: make test
 branches:
   only:
