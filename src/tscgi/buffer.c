@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
-#include "buffer.h"
+#include "tscgi/buffer.h"
 
 void buffer_init(struct buffer *buffer, void *ptr, size_t len)
 {

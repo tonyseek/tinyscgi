@@ -1,11 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "errors.h"
-#include "netstring.h"
-#include "header.h"
-#include "request.h"
-#include "buffer.h"
+#include "tscgi/errors.h"
+#include "tscgi/netstring.h"
+#include "tscgi/header.h"
+#include "tscgi/request.h"
+#include "tscgi/buffer.h"
 
 int parse_request(struct buffer *stream, struct request *request,
                   size_t body_max_len)

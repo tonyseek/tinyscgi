@@ -4,7 +4,7 @@
 #include "tscgi/buffer.h"
 #include "tscgi/header.h"
 #include "tscgi/request.h"
-#include "tscgi-server/server.h"
+#include "tscgisrv/server.h"
 
 void process_hello_request(struct scgi_server *s, struct request *request,
                            struct buffer *response_buffer)

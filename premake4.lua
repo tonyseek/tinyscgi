@@ -2,6 +2,7 @@ solution "tinyscgi"
     language "C"
     location "build"
     targetdir "target"
+    includedirs { "include" }
     configurations { "debug", "release" }
 
     configuration "debug"
@@ -13,32 +14,33 @@ solution "tinyscgi"
         flags { "Optimize" }
 
     libdirs {
-        os.findlib("uv")
+        os.findlib("uv"),
     }
 
+-- tinyscgi core library
 project "tscgi"
     kind "SharedLib"
     targetname "tscgi"
-    includedirs { "src/tscgi" }
     files {
+        "include/tscgi/*.h",
         "src/tscgi/*.c",
-        "src/tscgi/*.h",
     }
 
-project "tscgi-server"
+-- tinyscgi server library
+project "tscgisrv"
     kind "SharedLib"
-    targetname "tscgi-server"
-    includedirs { "src/tscgi-server" }
+    targetname "tscgisrv"
     files {
-        "src/tscgi-server/*.c",
-        "src/tscgi-server/*.h",
+        "include/tscgisrv/*.h",
+        "src/tscgisrv/*.c",
     }
     links { "tscgi", "uv" }
 
-project "tscgi-demo"
+-- tinyscgi command line interface
+project "tinyscgi"
     kind "ConsoleApp"
-    targetname "tscgi-demo"
+    targetname "tinyscgi"
     files {
-        "src/*.c",
+        "src/tinyscgi.c",
     }
-    links { "tscgi", "tscgi-server", "uv" }
+    links { "tscgi", "tscgisrv", "uv" }
